@@ -1,28 +1,8 @@
 import time
-import RPi.GPIO as GPIO
 import wiringpi2 as wiringpi
-from decorators import logged
 
-
-class Gpio:
-    def __init__(self, outs=[], ins=[]):
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setwarnings(False)
-        GPIO.cleanup()
-        for o in outs:
-            GPIO.setup(o, GPIO.OUT)
-        for i in ins:
-            GPIO.setup(i, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
-    def turn_on(self, led, verbose=False):
-        GPIO.output(led, 1)
-        if verbose:
-            print('{}: on'.format(led))
-
-    def turn_off(self, led, verbose=False):
-        GPIO.output(led, 0)
-        if verbose:
-            print('{}: off'.format(led))
+from .low_level import Gpio
+from .decorators import logged
 
 
 class Led:
@@ -79,7 +59,7 @@ class Led:
                 time.sleep(frequency)
 
     @logged(message='Warming up...')
-    def warm_up(self, leds=None, frequency=0.25):
+    def warm_up(self, frequency=0.25):
         middle = len(self.all) / 2
         if len(self.all) % 2 == 0:
             for i in range(middle):
@@ -112,7 +92,8 @@ class Led:
                 time.sleep(frequency)
 
     @logged(message='Pulsing...')
-    def pulse(self, leds=[1], frequency=0.001, times=5):
+    def pulse(self, leds=None, frequency=0.001, times=5):
+        leds = leds or [1]
         io = wiringpi.GPIO(wiringpi.GPIO.WPI_MODE_PINS)
         io.pinMode(1, io.PWM_OUTPUT)
         for led in leds:
@@ -132,13 +113,22 @@ class Led:
                     value -= increment
                     time.sleep(frequency)
 
-                if (value >= 1024):
+                if value >= 1024:
                     increasing = False
 
-                if (value <= 0):
-                    count = count + 1
+                if value <= 0:
+                    count += 1
                     print(count)
                     increasing = True
 
                 time.sleep(frequency)
-        GPIO.cleanup()
+        self.gpio.cleanup()
+
+
+class Button:
+    def __init__(self, pins=None):
+        self.pins = pins or [13]
+        self.gpio = Gpio(ins=[13])
+
+    def press(self, pin, action=None, *args, **kwargs):
+        self.gpio.press(pin, action, *args, **kwargs)

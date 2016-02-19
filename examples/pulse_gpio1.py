@@ -1,6 +1,6 @@
 import sys
 
-from utils import Led
+from raspberrypi_py.utils import Led
 
 
 def play(times=None, frequency=None):

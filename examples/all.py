@@ -1,7 +1,8 @@
 import sys
+
 import RPi.GPIO as GPIO
 
-from utils import Led
+from raspberrypi_py.utils import Led
 
 
 def play(frequency=0.2):
@@ -23,7 +24,7 @@ def play(frequency=0.2):
 
 if __name__ == '__main__':
     try:
-        frequency = float(sys.argv[1])
+        freq = float(sys.argv[1])
     except IndexError:
-        frequency = None
-    play(frequency)
+        freq = None
+    play(freq)

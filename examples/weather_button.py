@@ -1,16 +1,11 @@
 import sys
 import time
 import requests
-import RPi.GPIO as GPIO
 
-from utils import Led
-from settings import API_URL, API_KEY, CITY_IDS
+from .settings import API_URL, API_KEY, CITY_IDS
 
-button_in = 13
-GPIO.setup(button_in, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+from raspberrypi_py.components import Led, Button
 
-
-led = Led()
 
 params = '?id={}&appid={}&units=metric'.format(
     CITY_IDS['cluj_napoca'], API_KEY)
@@ -32,17 +27,22 @@ def light_temp(degrees):
         led.flicker(leds=led.blues, frequency=0.2, times=1)
     time.sleep(0.5)
 
-if len(sys.argv) > 1:
-    if sys.argv[1] == 'get':
-        light_temp(request_data())
 
-try:
-    print('Push the button to check temperature...')
-    while True:
-        input_state = GPIO.input(button_in)
-        if input_state is False:
+if __name__ == '__main__':
+    button = Button(pins=[13])
+    led = Led()
+    if len(sys.argv) > 1:
+        if sys.argv[1] == 'get':
             light_temp(request_data())
-except KeyboardInterrupt:
-    print('Cleaning up GPIO...')
-    GPIO.cleanup()
-    print('Done!')
+
+    try:
+        print('Push the button to check temperature...')
+        while True:
+            # input_state = GPIO.input(button_in)
+            # if input_state is False:
+            #     light_temp(request_data())
+            button.press(13, light_temp, request_data())
+    except KeyboardInterrupt:
+        print('Cleaning up GPIO...')
+        button.gpio.cleanup()
+        print('Done!')
