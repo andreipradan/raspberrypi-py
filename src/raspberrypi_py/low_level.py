@@ -30,7 +30,7 @@ class Gpio:
             if func:
                 func(*args, **kwargs)
             else:
-                print('Button Pressed')
+                print('Button {} Pressed'.format(button))
             time.sleep(0.2)
 
     def cleanup(self):

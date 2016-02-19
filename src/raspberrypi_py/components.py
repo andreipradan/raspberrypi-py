@@ -8,8 +8,8 @@ from .decorators import logged
 class Led:
     def __init__(self, pins=None, verbose=True):
         self.all = pins or [19, 13, 6, 12,
-                            27, 18, 4, 23, 16,
-                            5, 17, 22, 24, 25]
+                            5, 17, 22, 24, 25,
+                            27, 18, 4, 23, 16]
         self.gpio = Gpio(outs=self.all)
         self.verbose = verbose
 
