@@ -10,7 +10,7 @@ from setuptools import setup
 
 setup(
     name='raspberrypi-py',
-    version='1.0.1',
+    version='1.0.2',
     description=("RaspberryPI Python library for programming "
                  "GPIO LEDs, buttons and other fun features"),
     long_description=('Accessible interface between users and '
