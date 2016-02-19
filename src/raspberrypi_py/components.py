@@ -6,16 +6,12 @@ from .decorators import logged
 
 
 class Led:
-    def __init__(self, reds=None, blues=None, greens=None, verbose=True):
-        self.reds = reds or [19, 13, 6, 12]
-        self.blues = blues or [27, 18, 4, 23, 16]
-        self.greens = greens or [5, 17, 22, 24, 25]
+    def __init__(self, pins=None, verbose=True):
+        self.all = pins or [19, 13, 6, 12,
+                            27, 18, 4, 23, 16,
+                            5, 17, 22, 24, 25]
         self.gpio = Gpio(outs=self.all)
         self.verbose = verbose
-
-    @property
-    def all(self):
-        return self.reds + self.greens + self.blues
 
     @logged(message='On')
     def leds_on(self, leds=None):
