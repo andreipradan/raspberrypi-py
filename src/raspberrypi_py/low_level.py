@@ -4,6 +4,8 @@ import RPi.GPIO as GPIO
 
 class Gpio:
     def __init__(self, outs=None, ins=None):
+        outs = outs or []
+        ins = ins or []
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         GPIO.cleanup()
