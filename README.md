@@ -58,5 +58,5 @@ pip install raspberrypi-py
 Please read your RaspberryPI manual and/or any relevand documentation carefully before setting up your leds or buttons. Some pins are meant only for input(e.g. buttons) and some only for output(e.g. leds). 
 
 Misusing your pins may inflict damage to your RaspberryPI.
-
+ 
 Useful Raspberry PI B+ pinout diagram: https://www.raspberrypi.org/forums/viewtopic.php?f=78&t=82397
